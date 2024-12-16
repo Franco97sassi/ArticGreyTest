@@ -1,14 +1,11 @@
 import { Link } from '@remix-run/react';
-import { Image, Money } from '@shopify/hydrogen'; 
-import { AddToCartButton } from './AddToCartButton';
-import { useState } from 'react';
+import { Image, Money } from '@shopify/hydrogen';
 
 // Definir los tipos de los productos y variantes
 interface ProductVariant {
   id: string;
   title: string;
   priceV2: { amount: string; currencyCode: string };
-  availableForSale: boolean; // Asegúrate de tener esta propiedad para verificar disponibilidad
 }
 
 interface Product {
@@ -25,20 +22,16 @@ interface Collection {
   products: { nodes: Product[] };
 }
 
-export default function SupplementsCollection({ collection }: { collection: Collection }) {
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-
+export default function BundlesCollection({ collection }: { collection: Collection }) {
   if (!collection) return null;
-
-  const handleVariantSelect = (variant: ProductVariant) => {
-    setSelectedVariant(variant);
-  };
 
   return (
     <div className="start-with-your-goals mt-8">
       {/* Mostrar descripción solo si está disponible */}
       {collection.description && (
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">{collection.description}</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          {collection.description}
+        </h2>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -55,6 +48,7 @@ export default function SupplementsCollection({ collection }: { collection: Coll
                 className="h-full w-full object-cover object-center group-hover:scale-110 transition-transform"
               />
             </div>
+
             <h4 className="mt-4 text-lg font-medium text-gray-900 group-hover:text-blue-600">
               {product.title}
             </h4>
@@ -65,27 +59,27 @@ export default function SupplementsCollection({ collection }: { collection: Coll
             )}
 
             {/* Mostrar variantes de producto con sus respectivos precios */}
-            {/* {product.variants.nodes.length > 0 && (
+            {product.variants.nodes.length > 0 && (
               <div className="mt-4">
                 <h5 className="text-md font-bold text-gray-800">Variants:</h5>
                 <div className="flex flex-wrap gap-2">
                   {product.variants.nodes.map((variant: ProductVariant) => (
                     <div
                       key={variant.id}
-                      className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md cursor-pointer"
-                      onClick={() => handleVariantSelect(variant)}
+                      className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md cursor-not-allowed"
                     >
                       <span className="font-medium">{variant.title}</span> - 
-                      <Money data={variant.priceV2} />  
+                      <Money data={variant.priceV2} /> {/* Mostrar el precio de cada variante */}
                     </div>
                   ))}
                 </div>
               </div>
-            )} */}
+            )}
 
             {/* Estrellas y botón */}
             <div className="mt-4 flex items-center justify-between">
               <div className="flex text-white">
+                {/* Estrellas en color blanco */}
                 {[...Array(5)].map((_, index) => (
                   <svg
                     key={index}
@@ -103,8 +97,9 @@ export default function SupplementsCollection({ collection }: { collection: Coll
                 ))}
               </div>
               <div className="mt-4 text-right">
-                {/* Aquí se muestra el botón de agregar al carrito */}
-                 
+                <button className="bg-black text-white py-2 px-4 rounded-full hover:bg-gray-800 transition">
+                  Add {product.variants.nodes[0]?.priceV2.amount} {product.variants.nodes[0]?.currencyCode}
+                </button>
               </div>
             </div>
           </Link>

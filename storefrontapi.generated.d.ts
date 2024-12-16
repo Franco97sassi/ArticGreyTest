@@ -405,8 +405,32 @@ export type SupplementsCollectionQuery = {
             images: {
               nodes: Array<Pick<StorefrontAPI.Image, 'url' | 'altText'>>;
             };
+            variants: {
+              nodes: Array<
+                Pick<StorefrontAPI.ProductVariant, 'id' | 'title'> & {
+                  priceV2: Pick<
+                    StorefrontAPI.MoneyV2,
+                    'amount' | 'currencyCode'
+                  >;
+                }
+              >;
+            };
           }
         >;
+      };
+    }
+  >;
+};
+
+export type RealPeopleCollectionQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String']['input'];
+}>;
+
+export type RealPeopleCollectionQuery = {
+  collection?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Collection, 'id' | 'title'> & {
+      products: {
+        nodes: Array<Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle'>>;
       };
     }
   >;
@@ -422,6 +446,49 @@ export type FollowCollectionQuery = {
       products: {
         nodes: Array<
           Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle'> & {
+            images: {
+              nodes: Array<Pick<StorefrontAPI.Image, 'url' | 'altText'>>;
+            };
+          }
+        >;
+      };
+    }
+  >;
+};
+
+export type BrandsCollectionQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String']['input'];
+}>;
+
+export type BrandsCollectionQuery = {
+  collection?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Collection, 'id' | 'title'> & {
+      products: {
+        nodes: Array<
+          Pick<StorefrontAPI.Product, 'id' | 'title'> & {
+            images: {
+              nodes: Array<Pick<StorefrontAPI.Image, 'url' | 'altText'>>;
+            };
+          }
+        >;
+      };
+    }
+  >;
+};
+
+export type CleanSupplementsCollectionQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String']['input'];
+}>;
+
+export type CleanSupplementsCollectionQuery = {
+  collection?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Collection, 'id' | 'title'> & {
+      products: {
+        nodes: Array<
+          Pick<
+            StorefrontAPI.Product,
+            'id' | 'title' | 'description' | 'handle'
+          > & {
             images: {
               nodes: Array<Pick<StorefrontAPI.Image, 'url' | 'altText'>>;
             };
@@ -1268,13 +1335,25 @@ interface GeneratedQueryTypes {
     return: StartWithYourGoalsQuery;
     variables: StartWithYourGoalsQueryVariables;
   };
-  '#graphql\n  query SupplementsCollection($handle: String!) {\n    collection(handle: $handle) {\n      id\n      title\n      products(first: 8) {\n        nodes {\n          id\n          title\n          description\n          handle\n          images(first: 1) {\n            nodes {\n              url\n              altText\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+  '#graphql\n  query SupplementsCollection($handle: String!) {\n    collection(handle: $handle) {\n      id\n      title\n      products(first: 10) {\n        nodes {\n          id\n          title\n          description\n          handle\n          images(first: 1) {\n            nodes {\n              url\n              altText\n            }\n          }\n          variants(first: 5) {\n            nodes {\n              id\n              title\n              priceV2 {\n                amount\n                currencyCode\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n': {
     return: SupplementsCollectionQuery;
     variables: SupplementsCollectionQueryVariables;
   };
-  '#graphql\n  query FollowCollection($handle: String!) {\n    collection(handle: $handle) {\n      id\n      title\n      products(first: 8) {\n        nodes {\n          id\n          title\n          handle\n          images(first: 1) {\n            nodes {\n              url\n              altText\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+  '#graphql\n  query RealPeopleCollection($handle: String!) {\n    collection(handle: $handle) {\n      id\n      title\n      products(first: 10) {\n        nodes {\n          id\n          title\n          handle\n            \n        }\n      }\n    }\n  }\n': {
+    return: RealPeopleCollectionQuery;
+    variables: RealPeopleCollectionQueryVariables;
+  };
+  '#graphql\n  query FollowCollection($handle: String!) {\n    collection(handle: $handle) {\n      id\n      title\n      products(first: 10) {\n        nodes {\n          id\n          title\n          handle\n          images(first: 1) {\n            nodes {\n              url\n              altText\n            }\n          }\n        }\n      }\n    }\n  }\n': {
     return: FollowCollectionQuery;
     variables: FollowCollectionQueryVariables;
+  };
+  '#graphql\n  query BrandsCollection($handle: String!) {\n    collection(handle: $handle) {\n      id\n      title\n      products(first: 8) {\n        nodes {\n          id\n          title\n          images(first: 1) {\n            nodes {\n              url\n              altText\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+    return: BrandsCollectionQuery;
+    variables: BrandsCollectionQueryVariables;
+  };
+  '#graphql\n  query CleanSupplementsCollection($handle: String!) {\n    collection(handle: $handle) {\n      id\n      title\n      products(first: 8) {\n        nodes {\n          id\n          title\n          description\n          handle\n          images(first: 1) {\n            nodes {\n              url\n              altText\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+    return: CleanSupplementsCollectionQuery;
+    variables: CleanSupplementsCollectionQueryVariables;
   };
   '#graphql\n  query Article(\n    $articleHandle: String!\n    $blogHandle: String!\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n    blog(handle: $blogHandle) {\n      articleByHandle(handle: $articleHandle) {\n        title\n        contentHtml\n        publishedAt\n        author: authorV2 {\n          name\n        }\n        image {\n          id\n          altText\n          url\n          width\n          height\n        }\n        seo {\n          description\n          title\n        }\n      }\n    }\n  }\n': {
     return: ArticleQuery;
